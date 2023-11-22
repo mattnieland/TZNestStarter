@@ -1,0 +1,39 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
+  "eslint.validate": [
+    "javascript",
+    "json",
+    "json5",
+    "jsonc",
+    "markdown",
+    "typescript",
+    "yaml"
+  ],
+  "cSpell.words": [
+    "Checkin",
+    "Conifg",
+    "FFJVAIO",
+    "Nieland",
+    "Poiproximity",
+    "Trisept",
+    "VAXXML",
+    "commitlint",
+    "commitlintrc",
+    "fastify",
+    "funjet",
+    "healthz",
+    "kafkajs",
+    "lintstagedrc",
+    "nats",
+    "nestjs",
+    "pino",
+    "preinstall",
+    "unblinded",
+    "websockets",
+    "xmlbuilder"
+  ]
+}
