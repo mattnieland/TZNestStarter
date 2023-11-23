@@ -1,5 +1,6 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 
+import compression from '@fastify/compress';
 import { AppConfig, AppModule } from '@mod/app';
 import { NestFactory } from '@nestjs/core';
 import { clusterize } from '@util/clustering';
@@ -13,6 +14,8 @@ const bootstrap = async () => {
     AppConfig.getFastifyInstance(),
     { bufferLogs: true }
   );
+
+  app.register(compression, { encodings: ['gzip', 'deflate'] });
 
   initialize(app);
 
