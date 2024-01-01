@@ -17,7 +17,7 @@ import { initialize } from './helper';
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    AppConfig.getFastifyInstance(),
+    AppConfig.getInstance(),
     { logger: false }
   );
 

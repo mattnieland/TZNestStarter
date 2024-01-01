@@ -1,37 +1,25 @@
-ARG WORKDIR=/opt/app
-ARG NODE_VERSION=node:20.9.0-alpine3.17
-ARG GPR_TOKEN=none
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
+WORKDIR /app
 
-# Base Stage: Upgrade npm and install / upgrade pnpm
-FROM ${NODE_VERSION} AS base
-LABEL builder=true
-RUN npm i -g pnpm
-USER node
+FROM base AS prod-deps
+ARG GITLAB_PKG_TOKEN
+RUN echo "@destify-dev:registry=https://gitlab.com/api/v4/groups/78245221/-/packages/npm/" > .npmrc
+RUN echo "//gitlab.com/:_authToken=$GITLAB_PKG_TOKEN" >> .npmrc
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --ignore-scripts --prod --frozen-lockfile
 
-# Dependencies Stage: Copy package.json + lock file and install dependencies
-FROM base as installer
-ARG WORKDIR
-ARG GPR_TOKEN
-WORKDIR ${WORKDIR}
-COPY --chown=node:node package.json pnpm-lock.yaml ./
-RUN echo "@destify:registry=https://npm.pkg.github.com/" > .npmrc
-RUN echo "//npm.pkg.github.com/:_authToken=$GPR_TOKEN" > .npmrc
-# Skip pnpm checking + Husky init
-RUN pnpm install --ignore-scripts --frozen-lockfile
+FROM base AS build
+ARG GITLAB_PKG_TOKEN
+RUN echo "@destify-dev:registry=https://gitlab.com/api/v4/groups/78245221/-/packages/npm/" > .npmrc
+RUN echo "//gitlab.com/:_authToken=$GITLAB_PKG_TOKEN" >> .npmrc
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --ignore-scripts --frozen-lockfile
+RUN pnpm run build
 
-# Builder Stage: Copy node_modules from dependencies and build it
-FROM installer as builder
-ARG WORKDIR
-WORKDIR ${WORKDIR}
-COPY --chown=node:node . .
-RUN pnpm build
-
-# Production Stage: Copy dist from builder and start the application
-FROM ${NODE_VERSION} as runner
-ARG WORKDIR
-WORKDIR ${WORKDIR}
-COPY --chown=node:node --from=builder ${WORKDIR}/dist .
-USER node
-
-EXPOSE 3000
-CMD ["node", "main.js"]
+FROM base
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/dist /app/dist
+EXPOSE 44000
+CMD [ "pnpm", "start" ]

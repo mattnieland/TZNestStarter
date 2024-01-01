@@ -1,8 +1,7 @@
+import type { VersionRes } from '@/common/dtos';
 import type { TestingModule } from '@nestjs/testing';
 
 import { Test } from '@nestjs/testing';
-
-import type { VersionRes } from './dto';
 
 import { AppService } from './app.service';
 
@@ -18,7 +17,7 @@ describe('AppService', () => {
   });
 
   describe('getVersion()', () => {
-    it('should return version number', async () => {
+    it('should return version number', () => {
       const result: VersionRes = {
         version: process.env.npm_package_version,
       };
@@ -27,7 +26,7 @@ describe('AppService', () => {
   });
 
   describe('healthz()', () => {
-    it('should return health status', async () => {
+    it('should return health status', () => {
       expect(service.healthz()).toEqual('OK');
     });
   });

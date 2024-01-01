@@ -1,4 +1,4 @@
-# NestJS Starter
+# Nest Starter
 
 ## 📓 Commands
 
@@ -25,13 +25,61 @@ $ pnpm swagger
 
 # test both unit test and e2e test
 $ pnpm test
-
-# test all the e2e test
-$ pnpm test:e2e
-
-# test all the unit test
-$ pnpm test:unit
 ```
+
+### Running Locally
+
+You'll need to add in a .env.dev file. To do this, we're going to use Doppler CLI where the secrets are stored.
+
+If on Windows, open a terminal and execute this command:
+
+```bash
+winget install doppler
+```
+
+If on MacOS/Linux, open a terminal and execute this command:
+
+```bash
+(curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh || wget -t 3 -qO- https://cli.doppler.com/install.sh) | sudo sh
+```
+
+Test that Doppler CLI is installed with this command:
+
+```bash
+doppler --version
+```
+
+Next, navigate to the folder this README.md file sits in and open a terminal, then execute this command:
+
+```bash
+echo 'REPLACE_WITH_DOPPLER_TOKEN' | doppler configure set token
+```
+
+REPLACE_WITH_DOPPLER_TOKEN will need to be pulled from LastPass for the project in question. This will log you in to that project's secrets.
+
+Next, set the project and environment by issuing this command:
+
+```bash
+doppler setup --project project_name --config staging
+```
+
+You only need to set this up once, then you can refresh the secrets anytime with this command:
+
+```bash
+doppler secrets download --format=env --no-file > .env.dev
+```
+
+Note: On Windows PCs, you'll need to adjust the .env.dev file to be UTF-8 encoding for env-cmd to read it correctly.
+
+Finally, you need to create a .npmrc file with credentials to access the organization's private packages.
+
+```bash
+enable-pre-post-scripts=true
+@destify-dev:registry=https://gitlab.com/api/v4/groups/78245221/-/packages/npm/
+//gitlab.com/:_authToken=TOKEN
+```
+
+Replacing TOKEN with the value for "GitLab Package Registry Group PAT" in LastPass' "Shared - Odyssey Dev" folder.
 
 ### Running Application for Development
 
@@ -40,97 +88,12 @@ $ git clone <repo>
 
 $ pnpm install
 
-# Fill in require information in .env file
-$ cp .env.example .env
-
 # Linux / Mac users may require (allow git hook script executable)
-$ chmod +x .husky -R
+$ chmod -R +x .husky
 
 $ pnpm dev
 ```
 
-## 📁 Project Structure
-
-```text
-├── ci
-│   ├── docker-compose.yaml
-│   └── Dockerfile
-├── .husky
-│   ├── _
-│   │   ├── .gitignore
-│   │   └── husky.sh
-│   ├── commit-msg
-│   ├── pre-commit
-│   └── pre-push
-├── src
-│   ├── exception
-│   │   ├── index.ts
-│   │   └── normal.exception.ts
-│   ├── filter
-│   │   ├── all-exception.filter.ts
-│   │   ├── index.ts
-│   │   ├── normal-exception.filter.ts
-│   │   └── validator-exception.filter.ts
-│   ├── interceptor
-│   │   └── response.interceptor.ts
-│   ├── modules
-│   │   ├── app
-│   │   │   ├── dto
-│   │   │   │   ├── response
-│   │   │   │   │   ├── index.ts
-│   │   │   │   │   └── version.dto.ts
-│   │   │   │   └── index.ts
-│   │   │   ├── app.config.ts
-│   │   │   ├── app.controller.ts
-│   │   │   ├── app.module.ts
-│   │   │   ├── app.service.spec.ts
-│   │   │   ├── app.service.ts
-│   │   │   └── index.ts
-│   │   └── http
-│   │       ├── http.module.ts
-│   │       └── http.service.ts
-│   ├── shared
-│   │   ├── enums
-│   │   │   ├── index.ts
-│   │   │   ├── log-level.ts
-│   │   │   └── node-env.ts
-│   │   ├── interfaces
-│   │   │   ├── index.ts
-│   │   │   └── response.ts
-│   │   └── constants.ts
-│   ├── utils
-│   │   ├── clustering.ts
-│   │   ├── helper.ts
-│   │   └── swagger.ts
-│   ├── env.d.ts
-│   └── main.ts
-├── test
-│   ├── app.e2e-spec.ts
-│   ├── common.ts
-│   └── jest.e2e.config.ts
-├── .vscode
-│   ├── extensions.json
-│   └── settings.json
-├── .commitlintrc.js
-├── .dockerignore
-├── .editorconfig
-├── .env.example
-├── .eslintignore
-├── .eslintrc.js
-├── .gitattributes
-├── .gitignore
-├── jest.config.ts
-├── .lintstagedrc.js
-├── nest-cli.json
-├── .npmrc
-├── package.json
-├── pnpm-lock.yaml
-├── .prettierrc.js
-├── README.md
-├── tsconfig.json
-└── webpack.config.js
-```
-
 ## License
 
-This project is licensed under the MIT License, Copyright © 2023 Matt Nieland. See [LICENSE](./LICENSE) for more information.
+This project is licensed under the MIT License, Copyright © 2023 Matt Nieland. See [LICENSE](./LICENSE) for more information..

@@ -1,18 +1,32 @@
 import type { FailResponse, HttpFailResponse } from '@share/interfaces';
 
+import { ApiCodes } from '@/utils/apiCodes';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class NormalException extends HttpException {
+  static AUTHORIZATION_ERROR = (msg?: string) => {
+    return new NormalException(
+      msg || 'Authorization Error',
+      ApiCodes.AUTHORIZATION_ERROR
+    );
+  };
+
   static HTTP_REQUEST_TIMEOUT = () => {
-    return new NormalException('HTTP Request Timeout', 10001);
+    return new NormalException(
+      'HTTP Request Timeout',
+      ApiCodes.HTTP_REQUEST_TIMEOUT
+    );
   };
 
   static UNEXPECTED = (msg?: string) => {
-    return new NormalException(msg || 'Unexpected Error', 10003);
+    return new NormalException(msg || 'Unexpected Error', ApiCodes.UNEXPECTED);
   };
 
   static VALIDATION_ERROR = (msg?: string) => {
-    return new NormalException(msg || 'Validation Error', 10002);
+    return new NormalException(
+      msg || 'Validation Error',
+      ApiCodes.VALIDATION_ERROR
+    );
   };
 
   constructor(message: string, code: number) {

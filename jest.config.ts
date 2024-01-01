@@ -6,6 +6,8 @@ import { pathsToModuleNameMapper } from 'ts-jest';
 import { compilerOptions } from './tsconfig.json';
 
 const jestConfig: JestConfigWithTsJest = {
+  collectCoverageFrom: ['src/**/*.ts', 'src/**/*.js'],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura'],
   moduleFileExtensions: ['js', 'json', 'ts'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>',

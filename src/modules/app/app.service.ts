@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import type { VersionRes } from '@/common/dtos';
 
-import type { VersionRes } from './dto';
+import { Injectable } from '@nestjs/common';
 
 import * as packageJSON from '../../../package.json';
 

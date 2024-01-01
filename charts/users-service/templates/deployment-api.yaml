@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: {{ .Values.name }}
+  name: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.name }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
+          resources:
+            limits:
+              memory: '512Mi'
+              cpu: '150m'
+            requests:
+              memory: '512Mi'
+              cpu: '150m'
+          command:
+            - pnpm
+            - start
+          env:
+            - name: APP_VERSION
+              value: {{ .Values.image.tag }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.secret.name }}
+          ports:
+            - containerPort: 44000
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /api/healthz
+              port: http
+            failureThreshold: 1
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/healthz
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 30
+      imagePullSecrets:
+        - name: gitlab-registry

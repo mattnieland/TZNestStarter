@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 
-import compression from '@fastify/compress';
 import { AppConfig, AppModule } from '@mod/app';
 import { NestFactory } from '@nestjs/core';
 import { clusterize } from '@util/clustering';
@@ -11,11 +12,9 @@ const { CLUSTERING, PORT } = process.env;
 const bootstrap = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    AppConfig.getFastifyInstance(),
+    AppConfig.getInstance(),
     { bufferLogs: true }
   );
-
-  app.register(compression, { encodings: ['gzip', 'deflate'] });
 
   initialize(app);
 

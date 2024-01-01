@@ -1,3 +1,4 @@
+import { VersionRes } from '@/common/dtos';
 import { NormalException } from '@/exception';
 import { Controller, Get } from '@nestjs/common';
 import {
@@ -6,10 +7,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { toSwaggerError } from '@util/helper';
 
 import { AppService } from './app.service';
-import { VersionRes } from './dto';
 
 @ApiTags('System')
 @Controller()
@@ -25,6 +26,7 @@ export class AppController {
     type: VersionRes,
   })
   @ApiBadRequestResponse(toSwaggerError(NormalException.UNEXPECTED()))
+  @SkipThrottle({ default: false })
   @Get('version')
   getVersion(): VersionRes {
     return this.appService.getVersion();
@@ -45,6 +47,7 @@ export class AppController {
     },
     description: 'Return OK',
   })
+  @SkipThrottle({ default: false })
   @Get(AppController.prototype.healthz.name)
   healthz(): string {
     return this.appService.healthz();

@@ -5,11 +5,15 @@ const {
 } = require('@nestjs/cli/lib/compiler/defaults/swc-defaults');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { PinoWebpackPlugin } = require('pino-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /** @type { import('webpack').Configuration } */
 module.exports = {
+  devtool: 'source-map',
   entry: './src/main',
+
   externals: {},
+
   module: {
     rules: [
       {
@@ -20,16 +24,23 @@ module.exports = {
           options: swcDefaultsFactory().swcOptions,
         },
       },
+      {
+        loader: 'html-loader',
+        test: /\.html$/i,
+      },
     ],
   },
+
   node: {
     __dirname: false,
     __filename: false,
   },
+
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist/'),
   },
+
   plugins: [
     new IgnorePlugin({
       checkResource(resource) {
@@ -62,8 +73,17 @@ module.exports = {
         return false;
       },
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          context: 'node_modules/bull/lib/commands',
+          from: '**/*.lua',
+        },
+      ],
+    }),
     new PinoWebpackPlugin({ transports: ['pino-pretty'] }),
   ],
+
   resolve: {
     extensions: ['.js', '.json', '.ts'],
     mainFields: ['main'],

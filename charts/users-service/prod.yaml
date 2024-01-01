@@ -1,0 +1,6 @@
+env:
+  name: prod
+ingress:
+  apiHostname: users.travelzap.com
+secret:
+  name: users-service-prod-doppler-secret

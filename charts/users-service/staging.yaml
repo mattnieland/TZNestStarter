@@ -1,0 +1,6 @@
+env:
+  name: staging
+ingress:
+  apiHostname: users-staging.travelzap.com
+secret:
+  name: users-service-staging-doppler-secret

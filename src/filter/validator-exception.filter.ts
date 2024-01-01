@@ -1,4 +1,5 @@
 import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import type { Response } from 'express';
 import type { FastifyReply } from 'fastify';
 
 import { NormalException } from '@/exception';
@@ -24,10 +25,13 @@ export class ValidationExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(ValidationExceptionFilter.name);
 
   catch(exception: ValidationError, host: ArgumentsHost) {
-    this.logger.error(exception);
-
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<FastifyReply>();
+    let response = null;
+    try {
+      response = ctx.getResponse<FastifyReply>();
+    } catch (error) {
+      response = ctx.getResponse<Response>();
+    }
 
     return response
       .status(HttpStatus.UNPROCESSABLE_ENTITY)
