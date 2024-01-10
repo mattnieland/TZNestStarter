@@ -1,20 +1,24 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import type { RedisModuleOptions } from '@liaoliaots/nestjs-redis';
 import type { ValidationError } from '@nestjs/common';
 import type { I18nValidationError } from 'nestjs-i18n';
 
+import { User } from '@destify-dev/database-models';
 import {
   AllExceptionFilter,
+  ApiCodes,
   NormalExceptionFilter,
+  ResponseInterceptor,
   UnauthorizedExceptionFilter,
   UniqueViolationFilter,
   ValidationExceptionFilter,
-} from '@/filter';
-import { ResponseInterceptor } from '@/interceptor/response.interceptor';
-import { ApiCodes } from '@/utils/apiCodes';
+} from '@destify-dev/shared-be-utils';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -38,7 +42,7 @@ import { AppService } from './app.service';
     // Logger framework that better then NestJS default logger
     LoggerModule.forRoot(AppConfig.getLoggerConfig()),
     // Extend for external logging
-    // LoggerModule.forRoot(AppConfig.getExternalLoggerConfig()),
+    LoggerModule.forRoot(AppConfig.getExternalLoggerConfig()),
     // rate limiter
     ThrottlerModule.forRoot([
       {
@@ -60,6 +64,34 @@ import { AppService } from './app.service';
         AcceptLanguageResolver,
         new HeaderResolver(['x-lang']),
       ],
+    }),
+    // Database connection
+    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forRoot({
+      database: process.env.DB_DATABASE,
+      entities: [User],
+      host: process.env.DB_HOST,
+      logging: process.env.NODE_ENV === 'development',
+      password: process.env.DB_PASSWORD,
+      port: process.env.DB_PORT,
+      synchronize: process.env.NODE_ENV === 'development',
+      type: process.env.DB_TYPE as 'postgres',
+      username: process.env.DB_USERNAME,
+    }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (
+        configService: ConfigService
+      ): Promise<RedisModuleOptions> => {
+        return {
+          config: {
+            host: configService.get('REDIS_HOST') || 'localhost',
+            password: configService.get('REDIS_PASSWORD') || '',
+            port: configService.get('REDIS_PORT') || 6379,
+          },
+        };
+      },
     }),
   ],
   providers: [

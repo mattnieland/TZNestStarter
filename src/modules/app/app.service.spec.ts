@@ -1,4 +1,4 @@
-import type { VersionRes } from '@/common/dtos';
+import type { Version } from '@destify-dev/shared-be-utils';
 import type { TestingModule } from '@nestjs/testing';
 
 import { Test } from '@nestjs/testing';
@@ -18,7 +18,7 @@ describe('AppService', () => {
 
   describe('getVersion()', () => {
     it('should return version number', () => {
-      const result: VersionRes = {
+      const result: Version = {
         version: process.env.npm_package_version,
       };
       expect(service.getVersion()).toEqual(result);

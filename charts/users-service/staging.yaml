@@ -3,4 +3,4 @@ env:
 ingress:
   apiHostname: users-staging.travelzap.com
 secret:
-  name: users-service-staging-doppler-secret
+  name: tzneststarter-staging-doppler-secret

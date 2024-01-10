@@ -31,7 +31,7 @@ pnpm-debug.log*
 !.vscode/extensions.json
 
 # Enivronments File
-.env*
+.env.*
 !.env.example
 
 # Swagger
@@ -42,3 +42,9 @@ swagger.json
 
 # .env
 .env.*
+
+# Sentry Config File
+.env.sentry-build-plugin
+
+# Sentry Config File
+.env.sentry-build-plugin

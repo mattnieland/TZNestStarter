@@ -1,4 +1,4 @@
-# Nest Starter
+# tzneststarter
 
 ## 📓 Commands
 
@@ -23,7 +23,7 @@ $ pnpm start:prod || pnpm prod
 # generate Swagger JSON schema
 $ pnpm swagger
 
-# test both unit test and e2e test
+# tests
 $ pnpm test
 ```
 
@@ -60,7 +60,7 @@ REPLACE_WITH_DOPPLER_TOKEN will need to be pulled from LastPass for the project 
 Next, set the project and environment by issuing this command:
 
 ```bash
-doppler setup --project project_name --config staging
+doppler setup --project project-name --config staging
 ```
 
 You only need to set this up once, then you can refresh the secrets anytime with this command:
@@ -92,8 +92,8 @@ $ pnpm install
 $ chmod -R +x .husky
 
 $ pnpm dev
-```
 
 ## License
 
 This project is licensed under the MIT License, Copyright © 2023 Matt Nieland. See [LICENSE](./LICENSE) for more information..
+```

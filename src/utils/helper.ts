@@ -1,12 +1,12 @@
 /* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
-import type { NormalException } from '@/exception';
+import type { NormalException } from '@destify-dev/shared-be-utils';
 import type { INestApplication } from '@nestjs/common';
 import type { ApiResponseOptions } from '@nestjs/swagger';
 
-import * as Sentry from '@sentry/node';
-import { NodeEnv } from '@share/enums';
+import { NodeEnv } from '@destify-dev/shared-be-utils';
+import * as express from 'express';
 import { Logger } from 'nestjs-pino';
 
 /**
@@ -30,11 +30,11 @@ export const initialize = (app: INestApplication) => {
 
   app.useLogger(app.get(Logger));
 
-  Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.SENTRY_ENVIRONMENT,
-    release: `nest-starter@${process.env.npm_package_version}`,
-  });
+  // Sentry.init({
+  //   dsn: process.env.SENTRY_DSN,
+  //   environment: process.env.SENTRY_ENVIRONMENT,
+  //   release: `tzneststarter@${process.env.npm_package_version}`,
+  // });
 
   app.enableVersioning();
 
@@ -48,6 +48,11 @@ export const initialize = (app: INestApplication) => {
       'http://localhost:3000',
     ],
   });
+
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ extended: false, limit: '50mb' }));
+  const cookieParser = require('cookie-parser');
+  app.use(cookieParser());
 
   // For convenience exclude to set base path when doing e2e test
   if (BASE_PATH && NODE_ENV !== NodeEnv.TEST) app.setGlobalPrefix(BASE_PATH);

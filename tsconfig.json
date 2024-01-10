@@ -24,7 +24,7 @@
     "sourceMap": true,
     "strictBindCallApply": false,
     "strictNullChecks": false,
-    "target": "es2021"
+    "target": "es6"
   },
   "include": ["**/*.js", "**/*.ts", "**/.*.js"]
 }

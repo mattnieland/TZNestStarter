@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
-import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppConfig, AppModule } from '@mod/app';
 import { NestFactory } from '@nestjs/core';
@@ -10,7 +9,7 @@ import { initialize } from '@util/helper';
 const { CLUSTERING, PORT } = process.env;
 
 const bootstrap = async () => {
-  const app = await NestFactory.create<NestFastifyApplication>(
+  const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     AppConfig.getInstance(),
     { bufferLogs: true }

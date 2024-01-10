@@ -1,3 +1,4 @@
 {
-  "OK": "OK"
+  "OK": "OK",
+  "REDIS_PROBLEM": "Problem accessing caching service"
 }

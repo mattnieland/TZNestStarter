@@ -3,4 +3,4 @@ env:
 ingress:
   apiHostname: users.travelzap.com
 secret:
-  name: users-service-prod-doppler-secret
+  name: tzneststarter-prod-doppler-secret

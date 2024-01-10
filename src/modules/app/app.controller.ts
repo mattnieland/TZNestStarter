@@ -1,5 +1,4 @@
-import { VersionRes } from '@/common/dtos';
-import { NormalException } from '@/exception';
+import { NormalException, Version } from '@destify-dev/shared-be-utils';
 import { Controller, Get } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -23,12 +22,12 @@ export class AppController {
   })
   @ApiOkResponse({
     description: 'Return current version',
-    type: VersionRes,
+    type: Version,
   })
   @ApiBadRequestResponse(toSwaggerError(NormalException.UNEXPECTED()))
   @SkipThrottle({ default: false })
   @Get('version')
-  getVersion(): VersionRes {
+  getVersion(): Version {
     return this.appService.getVersion();
   }
 

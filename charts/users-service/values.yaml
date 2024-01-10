@@ -1,8 +1,8 @@
-name: users-service
+name: tzneststarter
 image:
-  repository: registry.gitlab.com/destify-dev/odyssey/users-service
+  repository: registry.gitlab.com/destify-dev/odyssey/tzneststarter
   tag: commit-131666f9
 env:
   name: staging
 secret:
-  name: users-service-staging-doppler-secret
+  name: tzneststarter-staging-doppler-secret

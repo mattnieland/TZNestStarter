@@ -1,4 +1,4 @@
-import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppConfig, AppModule } from '@mod/app';
 import { NestFactory } from '@nestjs/core';
@@ -15,7 +15,7 @@ import { initialize } from './helper';
   const { npm_package_description, npm_package_name, npm_package_version } =
     process.env;
 
-  const app = await NestFactory.create<NestFastifyApplication>(
+  const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     AppConfig.getInstance(),
     { logger: false }
@@ -29,7 +29,9 @@ import { initialize } from './helper';
       .setTitle(npm_package_name)
       .setDescription(npm_package_description)
       .setVersion(npm_package_version)
-      .addServer('http://localhost:3000', 'Localhost')
+      // .addServer(`http://localhost:${process.env.PORT}`, 'Local')
+      // .addServer('https://users-staging.travelzap.com', 'Staging')
+      // .addServer('https://users.travelzap.com', 'Production')
       .build()
   );
 

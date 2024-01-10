@@ -33,7 +33,9 @@
     "pino",
     "preinstall",
     "unblinded",
+    "uuidv",
     "websockets",
     "xmlbuilder"
-  ]
+  ],
+  "jest.jestCommandLine": "pnpm test --"
 }
