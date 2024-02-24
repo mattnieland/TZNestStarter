@@ -1,4 +1,4 @@
-# tzneststarter
+# Users Service
 
 ## 📓 Commands
 
@@ -10,6 +10,9 @@ $ pnpm build
 
 # format the code
 $ pnpm lint
+
+# start the app in watch mode (development)
+$ pnpm dev
 
 # start the app
 $ pnpm start
@@ -60,7 +63,7 @@ REPLACE_WITH_DOPPLER_TOKEN will need to be pulled from LastPass for the project 
 Next, set the project and environment by issuing this command:
 
 ```bash
-doppler setup --project project-name --config staging
+doppler setup --project users-service --config staging
 ```
 
 You only need to set this up once, then you can refresh the secrets anytime with this command:

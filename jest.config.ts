@@ -10,15 +10,15 @@ const jestConfig: JestConfigWithTsJest = {
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura'],
   moduleFileExtensions: ['js', 'json', 'ts'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>',
+    prefix: '<rootDir>'
   }),
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   rootDir: '.',
   testEnvironment: 'node',
   testRegex: '\\.spec\\.ts$',
   transform: {
-    '^.+\\.[jt]s$': ['@swc/jest', swcDefaultsFactory().swcOptions],
-  },
+    '^.+\\.[jt]s$': ['@swc/jest', swcDefaultsFactory().swcOptions]
+  }
 };
 
 export default jestConfig;

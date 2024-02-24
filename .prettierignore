@@ -6,3 +6,5 @@ charts
 
 # Files
 pnpm-lock.yaml
+jest.config.ts
+tsconfig.json

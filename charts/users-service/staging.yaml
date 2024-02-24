@@ -3,4 +3,9 @@ env:
 ingress:
   apiHostname: users-staging.travelzap.com
 secret:
-  name: tzneststarter-staging-doppler-secret
+  name: users-service-staging-doppler-secret
+hpa:
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 70

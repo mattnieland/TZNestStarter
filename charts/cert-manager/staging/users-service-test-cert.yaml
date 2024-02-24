@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: tzneststarter-cert
+  name: users-service-cert
   namespace: staging
 spec:
-  secretName: tzneststarter-cert
-  commonName: starter-staging.travelzap.com
+  secretName: users-service-cert
+  commonName: users-staging.travelzap.com
   dnsNames:
-    - starter-staging.travelzap.com
+    - users-staging.travelzap.com
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer

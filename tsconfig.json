@@ -8,6 +8,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": false,
     "incremental": true,
+    "inlineSources": true,
     "module": "commonjs",
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": false,
@@ -22,9 +23,10 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "sourceRoot": "/",
     "strictBindCallApply": false,
     "strictNullChecks": false,
     "target": "es6"
   },
-  "include": ["**/*.js", "**/*.ts", "**/.*.js"]
+  "include": ["**/*.js", "**/*.json", "**/*.ts", "**/.*.js"]
 }

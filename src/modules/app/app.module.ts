@@ -1,13 +1,18 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import type { RedisModuleOptions } from '@liaoliaots/nestjs-redis';
-import type { ValidationError } from '@nestjs/common';
+import type {
+  MiddlewareConsumer,
+  NestModule,
+  ValidationError,
+} from '@nestjs/common';
 import type { I18nValidationError } from 'nestjs-i18n';
 
 import { User } from '@destify-dev/database-models';
 import {
   AllExceptionFilter,
   ApiCodes,
+  AppConfig,
   NormalExceptionFilter,
+  RequestLogger,
   ResponseInterceptor,
   UnauthorizedExceptionFilter,
   UniqueViolationFilter,
@@ -17,8 +22,10 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WinstonModule } from 'nest-winston';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -27,10 +34,7 @@ import {
   I18nValidationPipe,
   QueryResolver,
 } from 'nestjs-i18n';
-import { LoggerModule } from 'nestjs-pino';
-import { join } from 'path';
 
-import { AppConfig } from './app.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -38,11 +42,9 @@ import { AppService } from './app.service';
   controllers: [AppController],
   imports: [
     // Allow to access .env file and validate env variables
-    ConfigModule.forRoot(AppConfig.getInitConifg()),
-    // Logger framework that better then NestJS default logger
-    LoggerModule.forRoot(AppConfig.getLoggerConfig()),
-    // Extend for external logging
-    LoggerModule.forRoot(AppConfig.getExternalLoggerConfig()),
+    ConfigModule.forRoot(AppConfig.GetInitConifg()),
+    // Logger
+    WinstonModule.forRoot(AppConfig.GetLoggerConfig('users-service')),
     // rate limiter
     ThrottlerModule.forRoot([
       {
@@ -50,13 +52,20 @@ import { AppService } from './app.service';
         ttl: 60000,
       },
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_ACCESS_SECRET_KEY'),
+        signOptions: {
+          expiresIn: configService.get('JWT_ACCESS_EXPIRATION_TIME'),
+        },
+      }),
+    }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       loaderOptions: {
-        path: join(
-          __dirname,
-          process.env.NODE_ENV === 'prod' ? '/i18n/' : '../../i18n/'
-        ),
+        path: 'dist/i18n/',
         watch: true,
       },
       resolvers: [
@@ -150,4 +159,8 @@ import { AppService } from './app.service';
     { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLogger).exclude('/healthz').forRoutes('*');
+  }
+}

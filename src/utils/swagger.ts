@@ -1,11 +1,10 @@
 import type { NestExpressApplication } from '@nestjs/platform-express';
 
-import { AppConfig, AppModule } from '@mod/app';
+import { AppConfig } from '@destify-dev/shared-be-utils';
+import { AppModule } from '@mod/app';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
-
-import { initialize } from './helper';
 
 /**
  * Generate Swagger JSON Schema offline, it used to deploy the document to other server but not the
@@ -17,11 +16,11 @@ import { initialize } from './helper';
 
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
-    AppConfig.getInstance(),
+    AppConfig.GetInstance(),
     { logger: false }
   );
 
-  initialize(app);
+  AppConfig.InitializeApp(app, 'users-service');
 
   const swaggerDoc = SwaggerModule.createDocument(
     app,
@@ -30,7 +29,7 @@ import { initialize } from './helper';
       .setDescription(npm_package_description)
       .setVersion(npm_package_version)
       // .addServer(`http://localhost:${process.env.PORT}`, 'Local')
-      // .addServer('https://users-staging.travelzap.com', 'Staging')
+      .addServer('https://users-staging.travelzap.com', 'Staging')
       // .addServer('https://users.travelzap.com', 'Production')
       .build()
   );

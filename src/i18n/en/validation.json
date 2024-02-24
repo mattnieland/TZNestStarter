@@ -1,9 +1,0 @@
-{
-  "NOT_EMPTY": "{property} cannot be empty",
-  "NO_SPACES": "{property} cannot contain spaces",
-  "WEAK_PASSWORD": "Password is too weak.  Must be at least {constraints.0.minLength} characters long and contain at least {constraints.0.minNumbers} number, {constraints.0.minSymbols} symbol, and {constraints.0.minUppercase} uppercase letter.",
-  "INVALID_EMAIL": "Email is invalid",
-  "INVALID_URL": "{property} is not a valid URL",
-  "INVALID_BOOLEAN": "{property} is not a boolean",
-  "INVALID_LENGTH": "{property} needs to be between {constraints.0} and {constraints.1} characters long"
-}

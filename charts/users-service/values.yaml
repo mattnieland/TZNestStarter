@@ -1,8 +1,14 @@
-name: tzneststarter
+name: users-service
 image:
-  repository: registry.gitlab.com/destify-dev/odyssey/tzneststarter
+  repository: registry.gitlab.com/destify-dev/odyssey/users-service
   tag: commit-131666f9
 env:
   name: staging
 secret:
-  name: tzneststarter-staging-doppler-secret
+  name: users-service-staging-doppler-secret
+hpa:
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+  targetMemoryUtilizationPercentage: 70
+

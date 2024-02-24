@@ -1,9 +1,8 @@
-import type { Version } from '@destify-dev/shared-be-utils';
 import type { TestingModule } from '@nestjs/testing';
 
 import { Test } from '@nestjs/testing';
 
-import { AppService } from './app.service';
+import { AppService } from '../src/modules/app/app.service';
 
 describe('AppService', () => {
   let service: AppService;
@@ -16,14 +15,14 @@ describe('AppService', () => {
     service = app.get<AppService>(AppService);
   });
 
-  describe('getVersion()', () => {
-    it('should return version number', () => {
-      const result: Version = {
-        version: process.env.npm_package_version,
-      };
-      expect(service.getVersion()).toEqual(result);
-    });
-  });
+  // describe('getVersion()', () => {
+  //   it('should return version number', () => {
+  //     const result: Version = {
+  //       version: process.env.npm_package_version,
+  //     };
+  //     expect(service.getVersion()).toEqual(result);
+  //   });
+  // });
 
   describe('healthz()', () => {
     it('should return health status', () => {

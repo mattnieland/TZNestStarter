@@ -16,11 +16,17 @@ const jsRules = {
     'unused-imports', // Auto remove unused imports
   ],
   rules: {
+    '@typescript-eslint/no-var-requires': 'off',
+
     // Not enforce using 'this' in a class function since some function can be a pure function
     'class-methods-use-this': 'off',
 
+    'global-require': 'off',
+
     // Conflict with alias path
     'import/extensions': 'off',
+
+    'import/no-extraneous-dependencies': 'off',
 
     // Conflict with perfectionist sorting
     'import/order': 'off',

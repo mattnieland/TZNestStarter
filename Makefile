@@ -1,20 +1,20 @@
-VERSION = 0.0.65
+VERSION = 0.0.129
 TAG = $(or ${VERSION_TAG}, v0.0.1)
 ENV = $(or ${ENVIRONMENT}, staging)
 
 deploy-dry:
-	helm upgrade --install tzneststarter ./charts/tzneststarter \
+	helm upgrade --install users-service ./charts/users-service \
 	--namespace $(ENV) \
 	--create-namespace \
 	--set image.tag=${TAG} \
 	--set env.name=${ENV} \
-	--values ./charts/tzneststarter/$(ENV).yaml \
+	--values ./charts/users-service/$(ENV).yaml \
 	--dry-run
 
 deploy:
-	helm upgrade --install tzneststarter ./charts/tzneststarter \
+	helm upgrade --install users-service ./charts/users-service \
 	--namespace $(ENV) \
 	--create-namespace \
 	--set image.tag=${TAG} \
 	--set env.name=${ENV} \
-	--values ./charts/tzneststarter/$(ENV).yaml
+	--values ./charts/users-service/$(ENV).yaml
